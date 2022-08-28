@@ -2,17 +2,22 @@ package com.yunboklog.api.Controller;
 
 import com.yunboklog.api.request.PostCreate;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
 public class PostController {
 
     @PostMapping("/posts")
-    public String get(@RequestBody PostCreate param) {
+    public Map<String, String> post(@RequestBody @Valid PostCreate param) {
 
-        log.info("param = {}", param.toString());
-        return "Hello World";
+       return Map.of();
     }
 }
