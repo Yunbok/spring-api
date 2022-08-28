@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest
 class PostControllerTest {
@@ -33,4 +34,18 @@ class PostControllerTest {
 
     }
 
+    @Test
+    @DisplayName("/posts 요청시 title 값은 필수 입니다.")
+    void test2() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/posts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\": \"제목입니다.\", \"content\": \"내용입니다. \"}")
+
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.title").value("타이틀을 입력해주세요."))
+                .andDo(MockMvcResultHandlers.print());
+
+    }
 }
