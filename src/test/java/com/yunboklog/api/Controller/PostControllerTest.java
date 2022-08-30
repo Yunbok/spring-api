@@ -1,7 +1,9 @@
 package com.yunboklog.api.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yunboklog.api.domain.Post;
 import com.yunboklog.api.repository.PostRepository;
+import com.yunboklog.api.request.PostCreate;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,10 +39,19 @@ class PostControllerTest {
     @DisplayName("/posts 요청 성공시 빈 Json 출력{}")
     void test() throws Exception {
 
+        PostCreate request = PostCreate.builder()
+                .content("내용입니다.")
+                .title("제목입니다.")
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(request);
+
+
         mockMvc.perform(MockMvcRequestBuilders.post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         //.content("{\"title\": \"제목입니다.\"}")
-                        .content("{\"title\": \"제목입니다.\", \"content\": \"내용입니다. \"}")
+                        .content(json)
 
                 )
                 .andExpect(status().isOk())
@@ -72,7 +83,7 @@ class PostControllerTest {
         //when
         mockMvc.perform(MockMvcRequestBuilders.post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\": \"제목입니다.\", \"content\": \"내용입니다. \"}")
+                        .content("{\"title\": \"제목입니다.\", \"content\": \"내용입니다.\"}")
 
                 )
                 .andExpect(status().isOk())
