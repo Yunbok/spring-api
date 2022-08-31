@@ -23,6 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PostControllerTest {
 
     @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
@@ -44,7 +47,7 @@ class PostControllerTest {
                 .title("제목입니다.")
                 .build();
 
-        ObjectMapper objectMapper = new ObjectMapper();
+
         String json = objectMapper.writeValueAsString(request);
 
 
