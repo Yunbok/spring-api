@@ -15,7 +15,7 @@ public class PostResponse {
 
     public PostResponse(Long id, String title, String content) {
         this.id = id;
-        this.title = title.substring(0, 10);
+        this.title = title.substring(0, Math.min(title.length(), 11));
         this.content = content;
     }
 
