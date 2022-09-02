@@ -2,6 +2,7 @@ package com.yunboklog.api.Controller;
 
 import com.yunboklog.api.domain.Post;
 import com.yunboklog.api.request.PostCreate;
+import com.yunboklog.api.response.PostResponse;
 import com.yunboklog.api.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +28,8 @@ public class PostController {
     }
 
     @GetMapping("/posts/{postId}")
-    public Post get(@PathVariable(name = "postId") Long id) {
-        Post post = postService.get(id);
-        return post;
+    public PostResponse get(@PathVariable(name = "postId") Long id) {
+        PostResponse postResponse = postService.get(id);
+        return postResponse;
     }
 }
