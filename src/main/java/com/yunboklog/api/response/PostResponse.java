@@ -19,9 +19,4 @@ public class PostResponse {
         this.content = content;
     }
 
-
-
-
-
-
 }

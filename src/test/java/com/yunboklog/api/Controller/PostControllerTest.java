@@ -4,15 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yunboklog.api.domain.Post;
 import com.yunboklog.api.repository.PostRepository;
 import com.yunboklog.api.request.PostCreate;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -119,6 +120,33 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.content").value("bar"))
                 .andDo(MockMvcResultHandlers.print());
 
-        //then
     }
+
+    @Test
+    @DisplayName("글 여러개 조회 ")
+    void test5() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("foo")
+                .content("bar")
+                .build();
+
+        postRepository.save(post);
+
+        Post post2 = Post.builder()
+                .title("foo2")
+                .content("bar2")
+                .build();
+
+        postRepository.save(post2);
+
+        // EXPECTED
+        mockMvc.perform(MockMvcRequestBuilders.get("/posts")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", Matchers.is(2)))
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+
 }
