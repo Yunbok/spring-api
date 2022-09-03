@@ -27,9 +27,15 @@ public class PostController {
        postService.write(request);
     }
 
+    @GetMapping("/posts")
+    public List<PostResponse> getList() {
+        return postService.getList();
+    }
+
+
     @GetMapping("/posts/{postId}")
-    public PostResponse get(@PathVariable(name = "postId") Long id) {
-        PostResponse postResponse = postService.get(id);
+    public PostResponse get(@PathVariable(name = "postId") Long postId) {
+        PostResponse postResponse = postService.get(postId);
         return postResponse;
     }
 }
