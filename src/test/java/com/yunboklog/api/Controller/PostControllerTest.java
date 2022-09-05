@@ -127,15 +127,15 @@ class PostControllerTest {
     void test5() throws Exception {
         //given
         Post post = Post.builder()
-                .title("foo")
-                .content("bar")
+                .title("title_1")
+                .content("content_1")
                 .build();
 
         postRepository.save(post);
 
         Post post2 = Post.builder()
-                .title("foo2")
-                .content("bar2")
+                .title("title_2")
+                .content("content_2")
                 .build();
 
         postRepository.save(post2);
@@ -145,6 +145,9 @@ class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", Matchers.is(2)))
+                .andExpect(jsonPath("$[0].id").value(post.getId()))
+                .andExpect(jsonPath("$[0].title").value("title_1"))
+                .andExpect(jsonPath("$[0].content").value("content_1"))
                 .andDo(MockMvcResultHandlers.print());
 
     }

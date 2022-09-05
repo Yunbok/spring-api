@@ -34,24 +34,17 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글 입니다."));
 
-        PostResponse postResponse = PostResponse.builder()
+        return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .build();
-
-        return postResponse;
     }
 
 
     public List<PostResponse> getList() {
         return postRepository.findAll().stream()
-                .map((post) -> PostResponse.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .content(post.getContent())
-                        .build()
-                )
+                .map(PostResponse::new)
                 .collect(Collectors.toList());
     }
 }
