@@ -40,7 +40,7 @@ class PostControllerTest {
 
 
     @Test
-    @DisplayName("/posts 요청 성공시 빈 Json 출력{}")
+    @DisplayName("/posts 요청 성공시  Json 출력{}")
     void test() throws Exception {
 
         PostCreate request = PostCreate.builder()
@@ -54,12 +54,10 @@ class PostControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
-                        //.content("{\"title\": \"제목입니다.\"}")
                         .content(json)
-
                 )
                 .andExpect(status().isOk())
-                .andExpect(content().string("{}"))
+                .andExpect(content().string(""))
                 .andDo(MockMvcResultHandlers.print());
 
     }
@@ -116,7 +114,7 @@ class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(post.getId()))
-                .andExpect(jsonPath("$.title").value("1234567891"))
+                .andExpect(jsonPath("$.title").value("12345678912"))
                 .andExpect(jsonPath("$.content").value("bar"))
                 .andDo(MockMvcResultHandlers.print());
 
@@ -126,25 +124,27 @@ class PostControllerTest {
     @DisplayName("글 여러개 조회 ")
     void test5() throws Exception {
         //given
-        Post post = Post.builder()
-                .title("foo")
-                .content("bar")
-                .build();
+        Post post = postRepository.save(Post.builder()
+                .title("title_1")
+                .content("content_1")
+                .build());
 
-        postRepository.save(post);
-
-        Post post2 = Post.builder()
-                .title("foo2")
-                .content("bar2")
-                .build();
-
-        postRepository.save(post2);
+        Post post2 =  postRepository.save(Post.builder()
+                .title("title_2")
+                .content("content_2")
+                .build());
 
         // EXPECTED
         mockMvc.perform(MockMvcRequestBuilders.get("/posts")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", Matchers.is(2)))
+                .andExpect(jsonPath("$[0].id").value(post.getId()))
+                .andExpect(jsonPath("$[0].title").value("title_1"))
+                .andExpect(jsonPath("$[0].content").value("content_1"))
+                .andExpect(jsonPath("$[1].id").value(post2.getId()))
+                .andExpect(jsonPath("$[1].title").value("title_2"))
+                .andExpect(jsonPath("$[1].content").value("content_2"))
                 .andDo(MockMvcResultHandlers.print());
 
     }
