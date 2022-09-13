@@ -4,6 +4,7 @@ package com.yunboklog.api.service;
 import com.yunboklog.api.domain.Post;
 import com.yunboklog.api.repository.PostRepository;
 import com.yunboklog.api.request.PostCreate;
+import com.yunboklog.api.request.PostSearch;
 import com.yunboklog.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,10 +49,10 @@ public class PostService {
     // 글이 -> 10,000,000 -> 모두 조회하는 경우 -> DB가 뻗는다
     // DB - > 애플리케이션 서버로 전달하는 시간, 트래픽비용 등이 많이 발생할 수 있다.
     // => 페이징 처리로 해결가능!
-    public List<PostResponse> getList(Pageable pageable) {
+    public List<PostResponse> getList(PostSearch postSearch) {
 //        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "id"));
 
-        return postRepository.findAll(pageable).stream()
+        return postRepository.getList(postSearch).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
     }

@@ -140,10 +140,10 @@ class PostControllerTest {
         postRepository.saveAll(requestPosts);
 
         // EXPECTED
-        mockMvc.perform(MockMvcRequestBuilders.get("/posts?page=1&sort=id,desc&size=5")
+        mockMvc.perform(MockMvcRequestBuilders.get("/posts?page=0&size=10")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(5)))
+                .andExpect(jsonPath("$.length()", is(10)))
                 .andExpect(jsonPath("$[0].title").value("윤복 제목 - 30"))
                 .andExpect(jsonPath("$[0].content").value("반포자이 - 30"))
                 .andDo(MockMvcResultHandlers.print());
