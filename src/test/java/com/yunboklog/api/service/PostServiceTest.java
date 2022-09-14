@@ -3,6 +3,7 @@ package com.yunboklog.api.service;
 import com.yunboklog.api.domain.Post;
 import com.yunboklog.api.repository.PostRepository;
 import com.yunboklog.api.request.PostCreate;
+import com.yunboklog.api.request.PostEdit;
 import com.yunboklog.api.request.PostSearch;
 import com.yunboklog.api.response.PostResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -128,6 +129,59 @@ class PostServiceTest {
         assertEquals(10L, posts.size());
         assertEquals("윤복 제목 - 30", posts.get(0).getTitle());
         assertEquals("윤복 제목 - 26", posts.get(4).getTitle());
+
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void titleUpdate() {
+        // given
+        Post post = Post.builder()
+                .title("윤복")
+                .content("반포자이")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("윤복233")
+                .content("반포자이")
+                .build();
+
+        // when
+        postService.edit(post.getId(), postEdit);
+
+        // then
+        Post result = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id =" + post.getId()));
+
+        assertEquals("윤복233", result.getTitle());
+        assertEquals("반포자이", result.getContent());
+
+    }
+
+    @Test
+    @DisplayName("글 내용 수정")
+    void contentUpdate() {
+        // given
+        Post post = Post.builder()
+                .title("윤복")
+                .content("반포자이")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("윤복")
+                .content("초가집")
+                .build();
+
+        // when
+        postService.edit(post.getId(), postEdit);
+
+        // then
+        Post result = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id =" + post.getId()));
+
+        assertEquals("초가집", result.getContent());
 
     }
 }
