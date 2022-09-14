@@ -1,7 +1,9 @@
 package com.yunboklog.api.Controller;
 
 import com.yunboklog.api.domain.Post;
+import com.yunboklog.api.domain.PostEditor;
 import com.yunboklog.api.request.PostCreate;
+import com.yunboklog.api.request.PostEdit;
 import com.yunboklog.api.request.PostSearch;
 import com.yunboklog.api.response.PostResponse;
 import com.yunboklog.api.service.PostService;
@@ -27,7 +29,7 @@ public class PostController {
 
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request) {
-       postService.write(request);
+        postService.write(request);
     }
 
 
@@ -40,5 +42,11 @@ public class PostController {
     @GetMapping("/posts")
     public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
         return postService.getList(postSearch);
+    }
+
+
+    @PatchMapping("/posts/{postId}")
+    public void patchPost(@PathVariable Long postId, @RequestBody @Valid PostEdit postEdit) {
+        postService.edit(postId, postEdit);
     }
 }

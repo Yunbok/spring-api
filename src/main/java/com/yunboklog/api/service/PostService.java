@@ -2,8 +2,10 @@ package com.yunboklog.api.service;
 
 
 import com.yunboklog.api.domain.Post;
+import com.yunboklog.api.domain.PostEditor;
 import com.yunboklog.api.repository.PostRepository;
 import com.yunboklog.api.request.PostCreate;
+import com.yunboklog.api.request.PostEdit;
 import com.yunboklog.api.request.PostSearch;
 import com.yunboklog.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,5 +58,21 @@ public class PostService {
         return postRepository.getList(postSearch).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void edit(Long id, PostEdit postEdit) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+
+        post.change(postEdit.getTitle(), postEdit.getContent());
+
+        PostEditor.PostEditorBuilder editorBuilder = post.toEditor();
+
+        PostEditor postEditor = editorBuilder.title(postEdit.getTitle())
+                .content(postEdit.getContent())
+                .build();
+
+        post.edit(postEditor);
     }
 }
