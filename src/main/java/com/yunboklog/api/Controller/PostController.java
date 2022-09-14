@@ -7,6 +7,7 @@ import com.yunboklog.api.request.PostEdit;
 import com.yunboklog.api.request.PostSearch;
 import com.yunboklog.api.response.PostResponse;
 import com.yunboklog.api.service.PostService;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -48,5 +49,10 @@ public class PostController {
     @PatchMapping("/posts/{postId}")
     public void patchPost(@PathVariable Long postId, @RequestBody @Valid PostEdit postEdit) {
         postService.edit(postId, postEdit);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public void deletePost(@PathVariable Long postId) {
+        postService.delete(postId);
     }
 }
