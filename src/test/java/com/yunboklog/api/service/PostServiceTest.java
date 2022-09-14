@@ -6,6 +6,7 @@ import com.yunboklog.api.request.PostCreate;
 import com.yunboklog.api.request.PostEdit;
 import com.yunboklog.api.request.PostSearch;
 import com.yunboklog.api.response.PostResponse;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -182,6 +183,24 @@ class PostServiceTest {
                 .orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id =" + post.getId()));
 
         assertEquals("초가집", result.getContent());
+
+    }
+
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void test7() {
+        // given
+        Post post = Post.builder()
+                .title("윤복")
+                .content("반포자이")
+                .build();
+        postRepository.save(post);
+
+        postService.delete(post.getId());
+
+        //then
+        assertEquals(0, postRepository.count());
 
     }
 }

@@ -24,6 +24,7 @@ import java.util.stream.IntStream;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -177,6 +178,25 @@ class PostControllerTest {
 //                .andExpect(jsonPath("$[0].title").value("윤복233"))
 //                .andExpect(jsonPath("$[0].content").value("제목"))
                 .andDo(print());
+
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void test7() throws Exception {
+
+        //given
+        Post post = Post.builder()
+                .title("윤복")
+                .content("제목")
+                .build();
+        postRepository.save(post);
+
+        mockMvc.perform(delete("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+
 
     }
 }
